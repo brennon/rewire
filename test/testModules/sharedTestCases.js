@@ -350,4 +350,23 @@ describe("rewire " + (typeof testEnv === "undefined"? "(node)": "(" + testEnv + 
         revert();
     });
 
+    it("should not overwrite other properties of injected objects when __set__ting with an object", function() {
+        var moduleA = rewire("./moduleA.js");
+        var beforeSetFunctionFromRequired = moduleA.__get__('someOtherModule.someOtherFunctionA');
+        moduleA.__set__({
+            someOtherModule: {
+                someOtherFunctionB: function() {}
+            }
+        });
+        var afterSetFunctionFromRequired = moduleA.__get__('someOtherModule.someOtherFunctionA');
+        expect(beforeSetFunctionFromRequired).to.equal(afterSetFunctionFromRequired);
+    });
+
+    it("should not overwrite other properties of injected objects when __set__ting with dot notation", function() {
+        var moduleA = rewire("./moduleA.js");
+        var beforeSetFunctionFromRequired = moduleA.__get__('someOtherModule.someOtherFunctionA');
+        moduleA.__set__('someOtherModule.someOtherFunctionB', function() {});
+        var afterSetFunctionFromRequired = moduleA.__get__('someOtherModule.someOtherFunctionA');
+        expect(beforeSetFunctionFromRequired).to.equal(afterSetFunctionFromRequired);
+    });
 });

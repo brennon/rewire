@@ -4,3 +4,6 @@ __filename = "/test/testModules/someOtherModule.js";
 
 exports.fs = {};
 exports.filename = __filename;
+
+exports.someOtherFunctionA = function() {};
+exports.someOtherFunctionB = function() {};
